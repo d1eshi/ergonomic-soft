@@ -11,7 +11,7 @@
     "setup": "python3 -m venv .venv && ./.venv/bin/python -m pip install -U pip && ./.venv/bin/python -m pip install -r backend/requirements.txt && npm ci",
     "dev": "vite",
     "dev:app": "cross-env BACKEND_PORT=5175 vite",
-    "build": "vite build",
+    "build": "vite build && electron-builder",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "echo 'No linter configurado'",
@@ -20,7 +20,8 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2"
+    "react-router-dom": "^6.26.2",
+    "zustand": "4.5.7"
   },
   "devDependencies": {
     "@types/node": "^20.14.12",
@@ -28,6 +29,8 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^32.1.2",
     "postcss": "^8.4.40",
     "tailwindcss": "^3.4.10",
@@ -35,9 +38,43 @@
     "vite": "^5.4.1",
     "vite-plugin-electron": "^0.28.6",
     "vite-plugin-electron-renderer": "^0.14.5",
-    "concurrently": "^8.2.2",
-    "cross-env": "^7.0.3"
+    "electron-builder": "^24.13.3",
+    "playwright": "^1.46.0"
+  }
+  ,
+  "build": {
+    "appId": "com.ergonomic.assistant",
+    "productName": "Ergonomic Assistant",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "backend/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "backend/",
+        "to": "backend/"
+      }
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.healthcare-fitness"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }
-
-

@@ -1,7 +1,12 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 import os
-from .models.db import init_db, get_settings as db_get_settings, update_settings as db_update_settings
+from .models.db import (
+    init_db,
+    get_settings as db_get_settings,
+    update_settings as db_update_settings,
+    purge_old_data,
+)
 from .cv_engine.session_manager import cv_session
 
 APP_VERSION = os.environ.get("APP_VERSION", "0.1.0")
@@ -20,6 +25,11 @@ app.add_middleware(
 @app.on_event("startup")
 def on_startup():
     init_db()
+    # Política de retención: borrar datos antiguos
+    try:
+        purge_old_data(30)
+    except Exception:
+        pass
 
 
 @app.get("/health")
@@ -73,6 +83,22 @@ def set_settings(settings: dict):
     notifications = bool(settings.get("notifications", True))
     db_update_settings(autostart, notifications)
     return {"ok": True, "settings": db_get_settings()}
+
+
+@app.get("/api/privacy-policy")
+def privacy_policy():
+    return {
+        "dataRetention": {
+            "maxHistoryDays": 30,
+            "aggregatedDataOnly": True,
+            "localStorageOnly": True,
+        },
+        "userConsent": {
+            "cameraAccess": True,
+            "dataCollection": True,
+            "analytics": True,
+        },
+    }
 
 
 @app.websocket("/api/cv/stream")

@@ -6,8 +6,34 @@ html, body, #root {
   height: 100%;
 }
 
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text-primary: #1e293b;
+  --accent-good: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-critical: #ef4444;
+}
+
+.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --text-primary: #f1f5f9;
+}
+
 body {
-  @apply bg-gray-950 text-gray-100;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Accesibilidad */
+:focus-visible {
+  outline: 2px solid var(--accent-warning);
+  outline-offset: 2px;
+}
+
+.hc * {
+  @apply contrast-150;
 }
 
 

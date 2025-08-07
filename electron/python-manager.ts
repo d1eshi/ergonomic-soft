@@ -104,6 +104,10 @@ export class PythonManager {
     }
     this.process = null;
   }
+
+  getPort(): number {
+    return this.port;
+  }
 }
 
 
