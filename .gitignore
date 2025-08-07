@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dist-electron/
+.DS_Store
+*.log
+backend/__pycache__/
+backend/**/*.pyc
+backend/ergonomic.db
+.env
+
+
+

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM"],
+    "skipLibCheck": true,
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "#shared/*": ["shared/*"],
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["electron", "src", "shared", "vite.config.ts"],
+  "exclude": ["dist", "dist-electron", "node_modules"]
+}
+
