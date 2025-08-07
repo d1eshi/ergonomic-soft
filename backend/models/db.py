@@ -3,7 +3,7 @@ import sqlite3
 from pathlib import Path
 
 
-DB_PATH = Path(__file__).resolve().parent.parent / "ergonomic.db"
+DB_PATH = Path(os.environ.get("ERGONOMIC_DB", Path(__file__).resolve().parent.parent / "ergonomic.db"))
 
 
 def get_conn() -> sqlite3.Connection:
@@ -35,6 +35,26 @@ def init_db() -> None:
         )
         # Asegurar fila única de settings
         cur.execute("INSERT OR IGNORE INTO user_settings (id) VALUES (1);")
+        conn.commit()
+
+
+def get_settings() -> dict:
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT autostart, notifications FROM user_settings WHERE id = 1")
+        row = cur.fetchone()
+        if not row:
+            return {"autostart": False, "notifications": True}
+        return {"autostart": bool(row[0]), "notifications": bool(row[1])}
+
+
+def update_settings(autostart: bool, notifications: bool) -> None:
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE user_settings SET autostart = ?, notifications = ? WHERE id = 1",
+            (1 if autostart else 0, 1 if notifications else 0),
+        )
         conn.commit()
 
 

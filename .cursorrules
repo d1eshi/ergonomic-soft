@@ -1,0 +1,60 @@
+# ERGONOMIC APP DEVELOPMENT RULES
+
+## CODE STYLE
+- Use TypeScript for all frontend code
+- Python type hints for backend
+- Functional components with hooks
+- Clean, self-documenting code
+- Use const assertions where appropriate
+- Prefer explicit imports over wildcard imports
+
+## ARCHITECTURE PRINCIPLES
+- Separation of concerns
+- Single responsibility principle
+- Local-first data storage
+- Privacy by design
+- No external API calls for CV processing
+- All user data stays on device
+
+## COMPUTER VISION STANDARDS
+- MediaPipe for pose detection
+- OpenCV for image processing
+- Real-time optimization (30fps target)
+- CPU-efficient algorithms
+- Graceful degradation for low-end hardware
+- Camera permission handling
+
+## ERGONOMIC STANDARDS
+- Based on ISO 9241-5 guidelines
+- OSHA computer workstation standards
+- Medical literature references
+- Customizable user thresholds
+- Evidence-based recommendations
+
+## ERROR HANDLING
+- Graceful camera failures
+- Fallback for poor lighting
+- User-friendly error messages
+- Automatic recovery mechanisms
+- Comprehensive logging
+
+## FILE STRUCTURE
+- Keep components modular
+- Use absolute imports
+- Consistent naming conventions
+- Separate types from implementations
+
+## PERFORMANCE
+- Optimize CV processing for real-time
+- Lazy load non-critical components
+- Efficient state management
+- Memory leak prevention
+
+## DOCUMENTATION STANDARDS
+- Every function must have JSDoc/docstring comments
+- Include @example tags with real usage
+- Generate README files for each major component
+- Create installation and troubleshooting guides
+- Add ASCII diagrams for complex systems
+- Document all configuration options
+- Include performance notes and benchmarks

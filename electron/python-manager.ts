@@ -2,6 +2,7 @@ import { ChildProcessWithoutNullStreams, spawn } from 'node:child_process';
 import path from 'node:path';
 import os from 'node:os';
 import http from 'node:http';
+import fs from 'node:fs';
 
 const DEFAULT_PORT = Number(process.env.BACKEND_PORT || 5175);
 
@@ -13,9 +14,27 @@ export class PythonManager {
     this.port = port;
   }
 
+  /**
+   * Resuelve el intérprete de Python a utilizar:
+   * 1) Respeta `PYTHON_PATH` si está definido
+   * 2) Prefiere `.venv` local del proyecto si existe
+   * 3) Fallback al binario del sistema por plataforma
+   *
+   * @returns Ruta o nombre del ejecutable de Python
+   */
   private getPythonCmd(): string {
     if (process.env.PYTHON_PATH) return process.env.PYTHON_PATH;
-    return process.platform === 'win32' ? 'python' : 'python3';
+
+    const projectRoot = process.cwd();
+    if (process.platform === 'win32') {
+      const venvWin = path.join(projectRoot, '.venv', 'Scripts', 'python.exe');
+      if (fs.existsSync(venvWin)) return venvWin;
+      return 'python';
+    }
+
+    const venvUnix = path.join(projectRoot, '.venv', 'bin', 'python');
+    if (fs.existsSync(venvUnix)) return venvUnix;
+    return 'python3';
   }
 
   async start(): Promise<void> {

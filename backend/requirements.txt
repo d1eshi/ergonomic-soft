@@ -3,6 +3,8 @@ uvicorn[standard]==0.30.3
 mediapipe>=0.10.10
 opencv-python>=4.9.0
 numpy>=1.26.0
+pydantic>=2.7.0
+websockets>=12.0
 
 
 

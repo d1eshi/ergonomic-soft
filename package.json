@@ -8,7 +8,9 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "setup": "python3 -m venv .venv && ./.venv/bin/python -m pip install -U pip && ./.venv/bin/python -m pip install -r backend/requirements.txt && npm ci",
     "dev": "vite",
+    "dev:app": "cross-env BACKEND_PORT=5175 vite",
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
