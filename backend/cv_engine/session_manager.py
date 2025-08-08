@@ -73,6 +73,8 @@ class CVSessionManager:
                     "inference_ms": self._last_detection.get("inference_ms"),
                     "lighting": self._last_detection.get("lighting"),
                     "image_size": self._last_detection.get("image_size"),
+                    # Incluir landmarks para que el frontend pueda dibujar el esqueleto
+                    "landmarks": self._last_detection.get("landmarks"),
                 })
         return analysis
 

@@ -25,21 +25,50 @@ export function useErgonomicData() {
         ws.onmessage = (ev) => {
           try {
             const data = JSON.parse(ev.data);
-            // Adaptador mínimo de payload backend -> ErgonomicAnalysis
+
+            // 1) Landmarks: backend envía lista de puntos {x,y,z,visibility}
+            //    El frontend espera { points: [...] }
+            const lm = Array.isArray(data?.landmarks)
+              ? { points: data.landmarks.map((p: any) => ({ x: Number(p.x), y: Number(p.y), z: p.z, visibility: p.visibility })) }
+              : (data?.landmarks && data.landmarks.points ? data.landmarks : null);
+
+            // 2) Estados por métrica desde backend (severity_by_metric)
+            const sev = data?.severity_by_metric || {};
+            const toStatus = (s: string | undefined): 'good' | 'warning' | 'critical' => {
+              if (!s) return 'good';
+              if (s === 'critical') return 'critical';
+              if (s === 'warning') return 'warning';
+              return 'good'; // optimal / acceptable -> good
+            };
+
+            // 3) Scores 1-10 aproximados a partir de severidad (sin usar ángulos aún)
+            const sevScore = (s: string | undefined): number => {
+              if (!s) return 8.5;
+              if (s === 'critical') return 3.0;
+              if (s === 'warning') return 6.0;
+              if (s === 'acceptable') return 8.0;
+              return 9.5; // optimal
+            };
+
+            const neckScore = sevScore(sev.neck_angle);
+            const backScore = sevScore(sev.back_angle);
+            const armsScore = sevScore(sev.elbow_angle);
+            const overallScore = Math.round(((neckScore + backScore + armsScore) / 3) * 10) / 10;
+
             const analysis: ErgonomicAnalysis = {
               timestamp: Date.now(),
-              landmarks: data?.landmarks ?? null,
+              landmarks: lm,
               scores: {
-                neck: Number(data?.scores?.neck ?? 8),
-                back: Number(data?.scores?.back ?? 7),
-                arms: Number(data?.scores?.arms ?? 9),
-                overall: Number(data?.scores?.overall ?? 7.5)
+                neck: neckScore,
+                back: backScore,
+                arms: armsScore,
+                overall: overallScore
               },
               statuses: {
-                neck: data?.statuses?.neck ?? 'good',
-                back: data?.statuses?.back ?? 'good',
-                arms: data?.statuses?.arms ?? 'good',
-                overall: data?.statuses?.overall ?? 'good'
+                neck: toStatus(sev.neck_angle),
+                back: toStatus(sev.back_angle),
+                arms: toStatus(sev.elbow_angle),
+                overall: toStatus(data?.overall_severity)
               }
             };
             updateAnalysis(analysis);

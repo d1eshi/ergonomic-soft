@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from pathlib import Path
+from typing import Optional
 
 
 DB_PATH = Path(os.environ.get("ERGONOMIC_DB", Path(__file__).resolve().parent.parent / "ergonomic.db"))
@@ -131,9 +132,9 @@ def insert_session_summary(
 def insert_alert_history(
     alert_type: str,
     triggered_at: str,
-    dismissed_at: str | None,
-    user_action: str | None,
-    effectiveness_score: int | None,
+    dismissed_at: Optional[str],
+    user_action: Optional[str],
+    effectiveness_score: Optional[int],
 ) -> int:
     with get_conn() as conn:
         cur = conn.cursor()
