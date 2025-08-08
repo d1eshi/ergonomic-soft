@@ -11,6 +11,3 @@ backend/ergonomic.db
 venv/
 __pycache__/
 *.pyc
-
-
-
