@@ -1,4 +1,4 @@
-## Desarrollo rápido (App completa)
+## Software de Monitoreo Ergonómico
 
 ### Requisitos
 - Node 18+ (recomendado 20+)
