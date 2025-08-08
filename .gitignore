@@ -7,7 +7,10 @@ backend/__pycache__/
 backend/**/*.pyc
 backend/ergonomic.db
 .env
-.venv/
+
+.venv/lib/python3.10/site-packages/
+.venv
 venv/
 __pycache__/
+.pytest_cache/
 *.pyc
