@@ -7,6 +7,10 @@ backend/__pycache__/
 backend/**/*.pyc
 backend/ergonomic.db
 .env
+.venv/
+venv/
+__pycache__/
+*.pyc
 
 
 
